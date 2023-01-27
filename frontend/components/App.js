@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink, Routes, Route, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import Articles from './Articles'
 import LoginForm from './LoginForm'
 import Message from './Message'
@@ -46,7 +47,7 @@ export default function App() {
     // On success, we should set the token to local storage in a 'token' key,
     // put the server success message in its proper state, and redirect
     // to the Articles screen. Don't forget to turn off the spinner!
-    
+
     setSpinnerOn(true);
     setMessage('');
     axios.post(loginUrl, { "username": username, "password": password })
@@ -59,6 +60,7 @@ export default function App() {
       })
       .catch(err => {
         console.log(err);
+        setMessage(err.response)
       })
   }
 
@@ -92,8 +94,8 @@ export default function App() {
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner />
-      <Message />
+      <Spinner on={spinnerOn} />
+      <Message message={message} />
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
         <h1>Advanced Web Applications</h1>
@@ -102,7 +104,7 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm  login={login} />} />
           <Route path="/articles" element={
             <>
               <ArticleForm />
