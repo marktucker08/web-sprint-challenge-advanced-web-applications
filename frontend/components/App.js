@@ -17,7 +17,6 @@ export default function App() {
   const [articles, setArticles] = useState([])
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
-  // const [currentArticle, setCurrentArticle] = useState({})
   
 
   // ✨ Research `useNavigate` in React Router v.6
@@ -101,8 +100,8 @@ export default function App() {
     setMessage('');
     axiosWithAuth().post(articlesUrl, article)
     .then(res => {
-      console.log(res.data);
-      
+      // console.log(res.data);
+      setArticles([...articles, article])
       setMessage(res.data.message);
       redirectToArticles();
       setSpinnerOn(false);
@@ -113,18 +112,24 @@ export default function App() {
     })
   }
 
-  const updateArticle = ({ article_id, article }) => {
+  const updateArticle = ({ article_id, title, text, topic }) => {
     // ✨ implement
     // You got this!
     setSpinnerOn(true);
     setMessage('');
-    axiosWithAuth().put(`${articlesUrl}/${article_id}`, article)
+    axiosWithAuth().put(`${articlesUrl}/${article_id}`, { "title": title, "text": text, "topic": topic })
     .then(res => {
       console.log(res.data);
-      
-      // setMessage(res.data.message);
-      // redirectToArticles();
-      // setSpinnerOn(false);
+      setArticles(articles.map(a => {
+        if (a.article_id === article_id) {
+          return ({ article_id, title, text, topic });
+        }
+        else 
+          return a;
+      }))
+      setMessage(res.data.message);
+      redirectToArticles();
+      setSpinnerOn(false);
     })
     .catch(err => {
       console.log(err);
@@ -140,8 +145,7 @@ export default function App() {
     .then(res => {
       console.log(res.data);
       setMessage(res.data.message);
-      setArticles(articles.filter(a => (a.article_id !== article_id)
-      ))
+      setArticles(articles.filter(a => (a.article_id !== article_id)));
       redirectToArticles();
       setSpinnerOn(false);
     })

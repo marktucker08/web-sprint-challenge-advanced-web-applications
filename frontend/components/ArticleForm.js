@@ -33,12 +33,13 @@ export default function ArticleForm(props) {
     // depending on the truthyness of the `currentArticle` prop.
     if (currentArticle) {
       updateArticle(values);
-      setValues(initialFormValues);
+      setCurrentArticleId(null);
     }
     else {
+      // setValues(initialFormValues);
       postArticle(values);
-      setValues(initialFormValues);
     }
+    setValues(initialFormValues);
   }
 
   const isDisabled = () => {
