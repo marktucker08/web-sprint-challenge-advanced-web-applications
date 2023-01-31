@@ -17,7 +17,7 @@ export default function App() {
   const [articles, setArticles] = useState([])
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
-  const [currentArticle, setCurrentArticle] = useState({})
+  // const [currentArticle, setCurrentArticle] = useState({})
   
 
   // ✨ Research `useNavigate` in React Router v.6
@@ -102,7 +102,7 @@ export default function App() {
     axiosWithAuth().post(articlesUrl, article)
     .then(res => {
       console.log(res.data);
-      getArticles();
+      
       setMessage(res.data.message);
       redirectToArticles();
       setSpinnerOn(false);
@@ -121,7 +121,7 @@ export default function App() {
     axiosWithAuth().put(`${articlesUrl}/${article_id}`, article)
     .then(res => {
       console.log(res.data);
-      // getArticles()
+      
       // setMessage(res.data.message);
       // redirectToArticles();
       // setSpinnerOn(false);
@@ -139,8 +139,9 @@ export default function App() {
     axiosWithAuth().delete(`${articlesUrl}/${article_id}`)
     .then(res => {
       console.log(res.data);
-      getArticles()
       setMessage(res.data.message);
+      setArticles(articles.filter(a => (a.article_id !== article_id)
+      ))
       redirectToArticles();
       setSpinnerOn(false);
     })
@@ -169,13 +170,13 @@ export default function App() {
               <ArticleForm postArticle={postArticle} 
               updateArticle={updateArticle} 
               setCurrentArticleId={setCurrentArticleId} 
-              currentArticle={currentArticle} />
+              currentArticle={articles.find(a => a.article_id === currentArticleId)} />
               <Articles articles={articles} 
               getArticles={getArticles} 
               deleteArticle={deleteArticle} 
               setCurrentArticleId={setCurrentArticleId} 
               currentArticleId={currentArticleId}
-              setCurrentArticle={setCurrentArticle} />
+               />
             </>
           } />
         </Routes>

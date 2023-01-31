@@ -17,7 +17,8 @@ export default function ArticleForm(props) {
       console.log(currentArticle);
       setValues(currentArticle);
     }
-    setValues(initialFormValues);
+    else  
+      setValues(initialFormValues);
   }, [currentArticle])
 
   const onChange = evt => {
@@ -49,9 +50,10 @@ export default function ArticleForm(props) {
     return true;
   }
 
-  const cancelEditBtn = () => {
+  const cancelEditBtn = evt => {
+    evt.preventDefault();
     setValues(initialFormValues);
-    setCurrentArticleId();
+    setCurrentArticleId(null);
   }
 
   return (
